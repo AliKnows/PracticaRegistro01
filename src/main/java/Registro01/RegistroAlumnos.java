@@ -6,6 +6,7 @@ package Registro01;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -85,7 +86,7 @@ public class RegistroAlumnos extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblRegistroAlum);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 530, 195));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 530, 480));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
@@ -165,6 +166,11 @@ public class RegistroAlumnos extends javax.swing.JFrame {
         getContentPane().add(spnEdadAlum, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 70, 140, -1));
 
         btnBorrarAlum.setText("Borrar");
+        btnBorrarAlum.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarAlumActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnBorrarAlum, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 220, 110, 40));
 
         btnAgregarAlum.setText("Agregar");
@@ -199,17 +205,71 @@ public class RegistroAlumnos extends javax.swing.JFrame {
     }//GEN-LAST:event_cboCarreraAlumActionPerformed
 
     private void btnAgregarAlumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarAlumActionPerformed
-        // TODO add your handling code here:
-        
-        
-        
-        
-        
+      
+        try{
+     Alumno alumno1=new Alumno(); //El metodo no hace nada pero permite crear un instancia de la clase alum
+     alumno1.setName(txtNombreAlumno.getText());
+     alumno1.setEdad(Integer.parseInt(spnEdadAlum.getValue().toString()));
+     alumno1.setCarrera(cboCarreraAlum.getSelectedItem().toString());
+     alumno1.setCodigo(txtCodigoAlum.getText());
+     alumno1.setSemestre(txtSemestreAlum.getText());
+     alumno1.setFacultad(cboFacultadAlum.getSelectedItem().toString());
+     alumno1.setPromedio(Double.parseDouble(txtPromedioAlum.getText().toString()));
+     
+     //le pasamos los datos al arreglo temporal 
+     listaAlumnos.add(alumno1);
+     //llamamos al metodo
+     refrescarTabla();
+        }catch(Exception e){
+           
+            JOptionPane.showMessageDialog(this,"ERROR AL AGREGAR ALUMNO");
+        }
+       
     }//GEN-LAST:event_btnAgregarAlumActionPerformed
+
+    private void btnBorrarAlumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarAlumActionPerformed
+        // TODO add your handling code here:
+        txtNombreAlumno.setText("");
+        spnEdadAlum.setValue(0);
+        cboCarreraAlum.setSelectedIndex(0);
+        txtCodigoAlum.setText("");
+        txtSemestreAlum.setText("");
+        cboFacultadAlum.setSelectedIndex(0);
+        txtPromedioAlum.setText("");
+        
+        
+    }//GEN-LAST:event_btnBorrarAlumActionPerformed
 
     public void refrescarTabla(){
         
+        //borra todos los elementos del modelo
+        while(modelo.getRowCount()>0){
+            modelo.removeRow(0);
+            
+        }
+        //para recorrer los elementos de la lista
+        //por cada elemento de la lista alumnos del elemento alumno lo vamos a recorrer
+        for (Alumno alumno : listaAlumnos) {
+            
+            //Arreglo de tipo Objeto: puede guardar cualquier tipo de variables
+            Object alumnoRecorrido[] = new Object[7];
+            
+            alumnoRecorrido[0]= alumno.getName();
+            alumnoRecorrido[1]= alumno.getEdad();
+            alumnoRecorrido[2]= alumno.getCarrera();
+            alumnoRecorrido[3]= alumno.getCodigo();
+            alumnoRecorrido[4]= alumno.getSemestre();
+            alumnoRecorrido[5]= alumno.getFacultad();
+            alumnoRecorrido[6]= alumno.getPromedio();
+            
+            modelo.addRow(alumnoRecorrido);
+                      
+        }
+        
         tblRegistroAlum.setModel(modelo);
+        
+        
+        
     
     }
     
